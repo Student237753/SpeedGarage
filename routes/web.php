@@ -9,6 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('permissions', App\Http\Controllers\PermissionController::class);
+Route::resource('permissions', App\Http\Controllers\RoleController::class);
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -26,6 +29,9 @@ Route::get('/dashboard', function () {
         Route::get('/carbrands/{brand}/{model}/edit', [CarBrandController::class, 'edit'])->name('carbrands.edit');
         Route::put('/carbrands/{brand}/{model}', [CarBrandController::class, 'update'])->name('carbrands.update');
         Route::delete('/carbrands/{brand}/{model}', [CarBrandController::class, 'destroy'])->name('carbrands.destroy');
+        Route::get('/admin', function () {
+            return view('admin.admin-panel');
+        })->name('admin');
     });
 
 });

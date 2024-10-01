@@ -32,6 +32,15 @@
                 <li><a href="{{ route('about-us') }}" class="hover:text-blue-400 transition duration-300">About Us</a></li>
                 <li><a href="{{ route('contact') }}" class="hover:text-blue-400 transition duration-300">Contact</a></li>
 
+                <!-- Show "Admin" button if authenticated (logged in) -->
+                @auth
+                    <li>
+                        <a href="{{ route('admin') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                            Admin Panel
+                        </a>
+                    </li>
+                @endauth
+
                 <!-- Show "Login" if guest (not logged in) -->
                 @guest
                     <li>
