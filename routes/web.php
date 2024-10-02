@@ -2,59 +2,71 @@
 
 use App\Http\Controllers\CarBrandController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 // Vendor Homepage
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('permissions', App\Http\Controllers\PermissionController::class);
-Route::resource('permissions', App\Http\Controllers\RoleController::class);
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-    // Login Routes
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Permissions Routes
+Route::resource('permissions', PermissionController::class);
+Route::delete('permissions/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
 
-    // Only (Logged in) users can create, edit and delete car models
-    Route::middleware('auth')->group(function () {
-        Route::get('/carbrands/{brand}/create', [CarBrandController::class, 'create'])->name('carbrands.create');
-        Route::post('/carbrands/{brand}', [CarBrandController::class, 'store'])->name('carbrands.store');
-        Route::get('/carbrands/{brand}/{model}/edit', [CarBrandController::class, 'edit'])->name('carbrands.edit');
-        Route::put('/carbrands/{brand}/{model}', [CarBrandController::class, 'update'])->name('carbrands.update');
-        Route::delete('/carbrands/{brand}/{model}', [CarBrandController::class, 'destroy'])->name('carbrands.destroy');
-        Route::get('/admin', function () {
-            return view('admin.admin-panel');
-        })->name('admin');
-    });
+// Roles Routes
+Route::resource('roles', RoleController::class);
+Route::get('roles-permissions', [RoleController::class, 'addPermissionToRole'])->name('roles-permissions.add-permissions');
+// Route for displaying the form to add/edit permissions for a role
+Route::get('roles-permissions/{id}', [RoleController::class, 'addPermissionToRole'])->name('roles-permissions');
+// Route for updating the role's permissions (PUT method)
+Route::put('roles-permissions/{id}', [RoleController::class, 'updateRolePermissions'])->name('roles-permissions.update');
 
+// Login Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Only logged-in users can create, edit, and delete car models
+    Route::get('/carbrands/{brand}/create', [CarBrandController::class, 'create'])->name('carbrands.create');
+    Route::post('/carbrands/{brand}', [CarBrandController::class, 'store'])->name('carbrands.store');
+    Route::get('/carbrands/{brand}/{model}/edit', [CarBrandController::class, 'edit'])->name('carbrands.edit');
+    Route::put('/carbrands/{brand}/{model}', [CarBrandController::class, 'update'])->name('carbrands.update');
+    Route::delete('/carbrands/{brand}/{model}', [CarBrandController::class, 'destroy'])->name('carbrands.destroy');
+
+    // Admin Panel Route
+    Route::get('/admin', function () {
+        return view('admin.admin-panel');
+    })->name('admin');
 });
-    //Public Routes
-    Route::get('/carbrands/{brand}', [CarBrandController::class, 'show'])->name('carbrands.show');
 
-    Route::get('/home', function () {
+// Public Routes
+Route::get('/carbrands/{brand}', [CarBrandController::class, 'show'])->name('carbrands.show');
+
+Route::get('/home', function () {
     return view('Homepage');
 })->name('home');
 
-    Route::get('/carbrands', function () {
+Route::get('/carbrands', function () {
     return view('carbrands');
 })->name('carbrands');
 
-    Route::get('/about-us', function () {
+Route::get('/about-us', function () {
     return view('about-us');
 })->name('about-us');
 
-    Route::get('/contact', function () {
+Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
 Route::post('/contact', [FormController::class, 'store'])->name('contact.send');
 
-
-
-require __DIR__.'/auth.php';
+// Include authentication routes
+require __DIR__ . '/auth.php';

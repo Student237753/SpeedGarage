@@ -10,39 +10,55 @@
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal flex flex-col min-h-screen">
 @include('layouts.header')
-<div class="container mx-auto">
-    <!-- Form for Permission    Creation -->
-    <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
-        <form action="{{ route('permissions.store') }}" method="POST">
-            @csrf
 
-            <!-- Permission Name Input -->
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700 font-bold mb-2">Permission Name:</label>
-                <input type="text" name="name" id="name" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
+<div class="container mx-auto mt-6">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Permissions List</h2>
 
-            <!-- Description Input -->
-            <div class="mb-4">
-                <label for="description" class="block text-gray-700 font-bold mb-2">Description:</label>
-                <input type="text" name="description" id="description" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+        <!-- Create New Permission Button -->
+        <div class="mb-4">
+            <a href="{{ route('permissions.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+                Create New Permission
+            </a>
+        </div>
 
-            <!-- Button Controls -->
-            <div class="flex justify-between">
-                <!-- Back Button -->
-                <a href="{{ route('home') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
-                    Back
-                </a>
+        <!-- Permissions Table -->
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+            <tr>
+                <th class="py-2 px-4 border-b border-gray-300 text-left">ID</th>
+                <th class="py-2 px-4 border-b border-gray-300 text-left">Permission Name</th>
+                <th class="py-2 px-4 border-b border-gray-300 text-left">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($permissions as $permission)
+                <tr>
+                    <td class="py-2 px-4 border-b border-gray-300">{{ $permission->id }}</td>
+                    <td class="py-2 px-4 border-b border-gray-300">{{ $permission->name }}</td>
+                    <td class="py-2 px-4 border-b border-gray-300">
+                        <a href="{{ route('permissions.edit', $permission->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded-lg">
+                            Edit
+                        </a>
+                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" class="inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-lg" onclick="return confirm('Are you sure you want to delete this permission?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
 
-                <!-- Create Permission Button -->
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                    Create Permission
-                </button>
-            </div>
-        </form>
+        @if($permissions->isEmpty())
+            <p class="text-gray-500 text-center mt-4">No permissions found.</p>
+        @endif
     </div>
 </div>
+
 @include('layouts.footer')
 </body>
 </html>

@@ -32,11 +32,11 @@
         </a>
     </div>
 
-    <div class="flex justify-center">
-        <a href="{{ route('users.index') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg">
-            Manage Users
-        </a>
-    </div>
+{{--    <div class="flex justify-center">--}}
+{{--        <a href="{{ route('users.index') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg">--}}
+{{--            Manage Users--}}
+{{--        </a>--}}
+{{--    </div>--}}
 
 </div>
 

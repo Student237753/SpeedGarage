@@ -8,9 +8,9 @@
 </head>
 <body>
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-400 py-6">
+<footer class="bg-gray-900 text-white py-4 mt-auto">
     <div class="container mx-auto text-center">
-        &copy; 2024 Speed Garage CRUD. All rights reserved.
+        &copy; {{ date('Y') }} Speed Garage. All rights reserved.
     </div>
 </footer>
 </body>
