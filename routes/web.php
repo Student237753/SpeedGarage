@@ -12,29 +12,30 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Dashboard - protected with auth and email verification
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Permissions Routes
+// Permission Routes
 Route::resource('permissions', PermissionController::class);
-Route::delete('permissions/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
 
-// Roles Routes
+// Role Routes
 Route::resource('roles', RoleController::class);
-Route::get('roles-permissions', [RoleController::class, 'addPermissionToRole'])->name('roles-permissions.add-permissions');
-// Route for displaying the form to add/edit permissions for a role
+
+// Route for adding/editing permissions for a specific role
 Route::get('roles-permissions/{id}', [RoleController::class, 'addPermissionToRole'])->name('roles-permissions');
-// Route for updating the role's permissions (PUT method)
+
+// Route for updating the role's permissions
 Route::put('roles-permissions/{id}', [RoleController::class, 'updateRolePermissions'])->name('roles-permissions.update');
 
-// Login Routes
+// Login/Authenticated User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Only logged-in users can create, edit, and delete car models
+    // Car Brands Routes - Only for logged-in users
     Route::get('/carbrands/{brand}/create', [CarBrandController::class, 'create'])->name('carbrands.create');
     Route::post('/carbrands/{brand}', [CarBrandController::class, 'store'])->name('carbrands.store');
     Route::get('/carbrands/{brand}/{model}/edit', [CarBrandController::class, 'edit'])->name('carbrands.edit');
@@ -66,6 +67,7 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+// Route for submitting the contact form
 Route::post('/contact', [FormController::class, 'store'])->name('contact.send');
 
 // Include authentication routes

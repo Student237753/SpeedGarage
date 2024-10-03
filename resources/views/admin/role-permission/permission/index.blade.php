@@ -11,7 +11,7 @@
 <body class="bg-gray-100 font-sans leading-normal tracking-normal flex flex-col min-h-screen">
 @include('layouts.header')
 
-<div class="container mx-auto mt-6">
+<div class="container mx-auto mt-6 flex-grow">
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-xl font-bold mb-4">Permissions List</h2>
 
@@ -59,6 +59,9 @@
     </div>
 </div>
 
-@include('layouts.footer')
+<!-- Footer -->
+<footer>
+    @include('layouts.footer')
+</footer>
 </body>
 </html>

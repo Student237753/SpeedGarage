@@ -27,11 +27,8 @@ class RoleController extends Controller
         ]);
 
         // Create a new role
-        Role::create([
-            'name' => $request->name
-        ]);
+        Role::create(['name' => $request->name]);
 
-        // Redirect back to the index with a success message
         return redirect()->route('roles.index')->with('success', 'Role created successfully.');
     }
 
@@ -42,43 +39,42 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        // Validate the request
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name,' . $role->id
         ]);
 
-        // Update the role
-        $role->update([
-            'name' => $request->name
-        ]);
+        $role->update(['name' => $request->name]);
 
-        // Redirect back to the index with a success message
         return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }
 
     public function destroy(Role $role)
     {
-        // Delete the role
         $role->delete();
 
-        // Redirect back to the index with a success message
         return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
     }
 
     public function addPermissionToRole($id)
     {
-        $role = Role::findOrFail($id); // Find the role
-        $permissions = Permission::all(); // Fetch all permissions
+        $role = Role::findOrFail($id);
+        $permissions = Permission::all(); // Fetch all available permissions
 
-        return view('admin.role-permission.add-permissions', compact('role', 'permissions'));
+        return view('admin.role-permission.givepermission', compact('role', 'permissions'));
     }
+
 
     public function updateRolePermissions(Request $request, $id)
     {
         $role = Role::findOrFail($id);
 
-        // Sync the selected permissions to the role
-        $role->syncPermissions($request->permissions);
+        // Validate the permissions
+        $request->validate([
+            'permissions' => 'array|nullable'
+        ]);
+
+        // Sync the permissions with the role
+        $role->syncPermissions($request->permissions ?? []);
 
         return redirect()->route('roles.index')->with('success', 'Permissions updated successfully.');
     }

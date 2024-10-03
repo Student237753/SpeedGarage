@@ -3,13 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Role Permissions</title>
+    <title>Add / Edit Role Permissions</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
+<header>@include('layouts.header')</header>
 <div class="container mx-auto mt-6">
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-xl font-bold mb-4">Add / Edit Permissions for Role: {{ $role->name }}</h2>
+
+        @if ($errors->any())
+            <div class="mb-4 text-red-600">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="mb-4 text-green-600">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <form action="{{ route('roles-permissions.update', $role->id) }}" method="POST">
             @csrf
@@ -35,5 +52,8 @@
         </form>
     </div>
 </div>
+<footer>
+    @include('layouts.footer')
+</footer>
 </body>
 </html>
